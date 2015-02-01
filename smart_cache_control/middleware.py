@@ -4,11 +4,11 @@ from datetime import datetime, timedelta
 from django.conf import settings
 import logging
 
-VARY_HEADER = settings.get("SCC_SET_VARY_HEADER", True)
-EXP_HEADER = settings.get("SCC_SET_EXPIRE_HEADER", True)
-MAX_AGE_PUBLIC = settings.get("SCC_MAX_AGE_PUBLIC", 86400)
-MAX_AGE_PRIVAT = settings.get("SCC_MAX_AGE_PRIVATE", 0)
-CACHE_URLS = settings.get("SCC_CUSTOM_URL_CACHE", [])
+VARY_HEADER = settings.SCC_SET_VARY_HEADER
+EXP_HEADER = settings.SCC_SET_EXPIRE_HEADER
+MAX_AGE_PUBLIC = settings.SCC_MAX_AGE_PUBLIC
+MAX_AGE_PRIVAT = settings.SCC_MAX_AGE_PRIVATE
+CACHE_URLS = settings.SCC_CUSTOM_URL_CACHE
 logger = logging.getLogger(__name__)
 
 
