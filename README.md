@@ -6,6 +6,8 @@ requests as public and authenticated requests as private. You can also customize
 * Cache-Control
 * Expires
 
+This middleware works and is designed to integrate Django with CloudFlare Cache (or similar services). Used in production on MinbilDinbil.dk servers. 
+
 ## Installation
 Add django-smartcc on your requirements.txt file or just launch:
 
