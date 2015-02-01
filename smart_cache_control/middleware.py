@@ -1,12 +1,15 @@
 import re
 from datetime import datetime, timedelta
+
 from django.conf import settings
+import logging
 
 VARY_HEADER = settings.get("SCC_SET_VARY_HEADER", True)
 EXP_HEADER = settings.get("SCC_SET_EXPIRE_HEADER", True)
 MAX_AGE_PUBLIC = settings.get("SCC_MAX_AGE_PUBLIC", 86400)
 MAX_AGE_PRIVAT = settings.get("SCC_MAX_AGE_PRIVATE", 0)
 CACHE_URLS = settings.get("SCC_CUSTOM_URL_CACHE", [])
+logger = logging.getLogger(__name__)
 
 
 class SmartCacheControlMiddleware(object):
@@ -53,19 +56,27 @@ class SmartCacheControlMiddleware(object):
         if VARY_HEADER:
             response['Vary'] = 'User-Agent, Accept-Language, Cookie'
 
-        if request.user.is_authenticated():
-            response['Cache-Control'] = 'private, max-age=%s' % MAX_AGE_PRIVAT
-            expire_in = int(MAX_AGE_PRIVAT)
+        try:
+            if request.user.is_authenticated():
+                expire_in = int(MAX_AGE_PRIVAT)
+                response['Cache-Control'] = 'private, max-age={}'.format(
+                    MAX_AGE_PRIVAT
+                )
+
+        except AttributeError:
+            logger.warning(
+                "smrtcc: Unable to determinate if the user is authenticated"
+            )
 
         for url_pattern, cache_type, max_age, in CACHE_URLS:
             regex = re.compile(url_pattern)
 
             if regex.match(host):
+                expire_in = max_age
                 response['Cache-Control'] = '{type}, max-age={age}'.format(
                     type=cache_type,
                     age=max_age
                 )
-                expire_in = max_age
 
         if EXP_HEADER:
             expires = datetime.utcnow() + timedelta(seconds=expire_in)
