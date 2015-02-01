@@ -1,16 +1,32 @@
 # django-smartcc
-Set the Cache-Control header automatically, defining not-authenticated
-requests as public (24h of cache by Default) and authenticated requests
-as private ( 0 seconds of cache ). This middleware class will also setup
-these HTTP headers:
+Set some cache-related headers automatically, defining not-authenticated
+requests as public and authenticated requests as private. You can also customize these values for specific URLs. This middleware class will also setup these HTTP headers:
 
 * Vary
 * Cache-Control
 * Expires
 
+## Installation
+Add django-smartcc on your requirements.txt file or just launch:
+
+    pip install -U django-smartcc
+   
+Then add django-smartcc in the installed apps and in the middleware, so add these line in your settings.py file.
+
+    # settings.py
+    INSTALLED_APPS += [
+        'smart_cache_control',    ]
+    
+    MIDDLEWARE_CLASSES += [
+        'smart_cache_control.middleware.SmartCacheControlMiddleware'
+    ]
+
+**Note**: Remember that this middleware requires authentication, so it should be loaded after the *django.contrib.auth.middleware.AuthenticationMiddleware*!
+    
+
+## Customization and Settings
 You can customize a specific Cache-control value on each URL. For example
-if we want to avoid cache on /hello/ but always have it on /api/search we
-should write this in our settings file:
+if we want to avoid cache on */hello/* , but always have it on */api/search* for 5 minutes, we should write this in our settings file:
 
     # settings.py
     SCC_CUSTOM_URL_CACHE = (
