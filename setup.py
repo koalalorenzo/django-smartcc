@@ -5,18 +5,18 @@ import os
 
 
 def read_file(fname):
-    file_path = os.path.join(os.path.dirname(__file__), fname)
-    return open(file_path).read()
-
+    if os.path.isfile("README.md"):
+        file_path = os.path.join(os.path.dirname(__file__), fname)
+        return open(file_path).read()
+    else:
+        return "A django Middleware that will help to set cache-control header on the views."
 
 setup(
     name="django-smartcc",
-    version="0.1",
+    version="0.1.1",
     description="",
-    author="Lorenzo Setale",
+    author='Lorenzo Setale ( http://who.is.lorenzo.setale.me/? )',
     author_email="koalalorenzo@gmail.com",
-    maintainer="Lorenzo Setale",
-    maintainer_email="koalalorenzo@gmail.com",
     url="https://github.com/koalalorenzo/django-smartcc",
 
     license="GPL v2",
