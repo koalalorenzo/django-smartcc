@@ -13,7 +13,7 @@ def read_file(fname):
 
 setup(
     name="django-smartcc",
-    version="0.1.1",
+    version="0.1.2",
     description="",
     author='Lorenzo Setale ( http://who.is.lorenzo.setale.me/? )',
     author_email="koalalorenzo@gmail.com",
