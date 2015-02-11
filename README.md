@@ -16,10 +16,6 @@ Add django-smartcc on your requirements.txt file or just launch:
 Then add django-smartcc in the installed apps and in the middleware, so add these line in your settings.py file.
 
     # settings.py
-    INSTALLED_APPS += [
-        'smart_cache_control',
-    ]
-    
     MIDDLEWARE_CLASSES += [
         'smart_cache_control.middleware.SmartCacheControlMiddleware'
     ]
