@@ -9,7 +9,7 @@ import logging
 VARY_HEADER = getattr(settings, 'SCC_SET_VARY_HEADER', True)
 EXP_HEADER = getattr(settings, 'SCC_SET_EXPIRE_HEADER', True)
 MAX_AGE_PUBLIC = getattr(settings, 'SCC_MAX_AGE_PUBLIC', 86400)
-MAX_AGE_PRIVAT = getattr(settings, 'SCC_MAX_AGE_PRIVATE', 0)
+MAX_AGE_PRIVATE = getattr(settings, 'SCC_MAX_AGE_PRIVATE', 0)
 CACHE_URLS = getattr(settings, 'SCC_CUSTOM_URL_CACHE', [])
 
 logger = logging.getLogger(__name__)
@@ -61,9 +61,9 @@ class SmartCacheControlMiddleware(object):
 
         try:
             if request.user.is_authenticated():
-                expire_in = int(MAX_AGE_PRIVAT)
+                expire_in = int(MAX_AGE_PRIVATE)
                 response['Cache-Control'] = 'private, max-age={}'.format(
-                    MAX_AGE_PRIVAT
+                    MAX_AGE_PRIVATE
                 )
 
         except AttributeError:
