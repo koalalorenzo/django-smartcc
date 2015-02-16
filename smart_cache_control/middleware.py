@@ -6,30 +6,11 @@ from django.conf import settings
 import logging
 
 # Getting variables from settings
-try:
-    VARY_HEADER = settings.SCC_SET_VARY_HEADER
-except:
-    VARY_HEADER = True
-
-try:
-    EXP_HEADER = settings.SCC_SET_EXPIRE_HEADER
-except:
-    EXP_HEADER = True
-
-try:
-    MAX_AGE_PUBLIC = settings.SCC_MAX_AGE_PUBLIC
-except:
-    MAX_AGE_PUBLIC = 86400
-
-try:
-    MAX_AGE_PRIVAT = settings.SCC_MAX_AGE_PRIVATE
-except:
-    MAX_AGE_PRIVAT = 0
-
-try:
-    CACHE_URLS = settings.SCC_CUSTOM_URL_CACHE
-except:
-    CACHE_URLS = []
+VARY_HEADER = getattr(settings, 'SCC_SET_VARY_HEADER', True)
+EXP_HEADER = getattr(settings, 'SCC_SET_EXPIRE_HEADER', True)
+MAX_AGE_PUBLIC = getattr(settings, 'SCC_MAX_AGE_PUBLIC', 86400)
+MAX_AGE_PRIVATE = getattr(settings, 'SCC_MAX_AGE_PRIVATE', 0)
+CACHE_URLS = getattr(settings, 'SCC_CUSTOM_URL_CACHE', [])
 
 logger = logging.getLogger(__name__)
 
@@ -80,9 +61,9 @@ class SmartCacheControlMiddleware(object):
 
         try:
             if request.user.is_authenticated():
-                expire_in = int(MAX_AGE_PRIVAT)
+                expire_in = int(MAX_AGE_PRIVATE)
                 response['Cache-Control'] = 'private, max-age={}'.format(
-                    MAX_AGE_PRIVAT
+                    MAX_AGE_PRIVATE
                 )
 
         except AttributeError:
