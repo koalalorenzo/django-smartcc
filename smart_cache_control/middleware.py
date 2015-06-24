@@ -65,7 +65,7 @@ class SmartCacheControlMiddleware(object):
         expire_in = int(MAX_AGE_PUBLIC)
 
         if VARY_HEADERS:
-            response['Vary'] = VARY_HEADERS.join(', ')
+            response['Vary'] = ', '.join(VARY_HEADERS)
 
         try:
             if request.user.is_authenticated():
