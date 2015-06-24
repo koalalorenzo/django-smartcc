@@ -7,10 +7,12 @@ import logging
 
 # Getting variables from settings
 VARY_HEADER = getattr(settings, 'SCC_SET_VARY_HEADER', True)
+VARY_HEADERS = getattr(settings, 'SCC_VARY_HEADERS', ['Accept-Encoding', 'Accept-Language', 'Cookie'])
 EXP_HEADER = getattr(settings, 'SCC_SET_EXPIRE_HEADER', True)
 MAX_AGE_PUBLIC = getattr(settings, 'SCC_MAX_AGE_PUBLIC', 86400)
 MAX_AGE_PRIVATE = getattr(settings, 'SCC_MAX_AGE_PRIVATE', 0)
 CACHE_URLS = getattr(settings, 'SCC_CUSTOM_URL_CACHE', [])
+DISABLED = getattr(settings, 'SCC_DISABLED', False)
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +38,9 @@ class SmartCacheControlMiddleware(object):
 
     Other options are available to customize the behaviour of the middleware:
 
-    SCC_SET_VARY_HEADER: Define if the middleware have to set the Vary header.
-                         Default value: True
+    SCC_VARY_HEADERS: A list of strings specifying which headers to includ in
+                      the Vary header.
+                      Default value: ['Accept-Encoding', 'Accept-Language', 'Cookie']
 
     SCC_SET_EXPIRE_HEADER: Define if the middleware should set the Expires
                            header. Default value: True
@@ -47,17 +50,22 @@ class SmartCacheControlMiddleware(object):
 
     SCC_MAX_AGE_PRIVATE: Define the default max-age value in seconds for
                          private requests. Default value: 0
-
+                         
+    SCC_DISABLED: Disable the addition of headers, such as during development.
+                  Default value: *False*
     """
     def process_response(self, request, response):
+        if DISABLED:
+            return response
+        
         meta = request.META.get('PATH_INFO', "")
         host = request.META.get('HTTP_HOST', "") + meta
 
         response['Cache-Control'] = 'public, max-age=%s' % MAX_AGE_PUBLIC
         expire_in = int(MAX_AGE_PUBLIC)
 
-        if VARY_HEADER:
-            response['Vary'] = 'User-Agent, Accept-Language, Cookie'
+        if VARY_HEADERS:
+            response['Vary'] = ', '.join(VARY_HEADERS)
 
         try:
             if request.user.is_authenticated():

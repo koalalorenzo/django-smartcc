@@ -35,8 +35,8 @@ if we want to avoid cache on */hello/* , but always have it on */api/search* for
 
 Other options are available to customize the behaviour of the middleware:
 
-**SCC_SET_VARY_HEADER**: Define if the middleware have to set the Vary header.
-                     Default value: *True*
+**SCC_VARY_HEADERS**: A list of strings specifying which headers to includ in
+                  the Vary header. Default value: *['Accept-Encoding', 'Accept-Language', 'Cookie']*
 
 **SCC_SET_EXPIRE_HEADER**: Define if the middleware should set the Expires
                        header. Default value: *True*
@@ -46,3 +46,6 @@ Other options are available to customize the behaviour of the middleware:
 
 **SCC_MAX_AGE_PRIVATE**: Define the default max-age value in seconds for
                      private requests. Default value: *0*
+
+**SCC_DISABLED**: Disable the addition of headers, such as during development.
+              Default value: *False*
