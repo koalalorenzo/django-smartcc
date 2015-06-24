@@ -46,3 +46,6 @@ Other options are available to customize the behaviour of the middleware:
 
 **SCC_MAX_AGE_PRIVATE**: Define the default max-age value in seconds for
                      private requests. Default value: *0*
+
+**SCC_DISABLED**: Disable the addition of headers, such as during development.
+              Default value: *False*

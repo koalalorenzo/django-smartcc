@@ -11,6 +11,7 @@ EXP_HEADER = getattr(settings, 'SCC_SET_EXPIRE_HEADER', True)
 MAX_AGE_PUBLIC = getattr(settings, 'SCC_MAX_AGE_PUBLIC', 86400)
 MAX_AGE_PRIVATE = getattr(settings, 'SCC_MAX_AGE_PRIVATE', 0)
 CACHE_URLS = getattr(settings, 'SCC_CUSTOM_URL_CACHE', [])
+DISABLED = getattr(settings, 'SCC_DISABLED', False)
 
 logger = logging.getLogger(__name__)
 
@@ -47,9 +48,15 @@ class SmartCacheControlMiddleware(object):
 
     SCC_MAX_AGE_PRIVATE: Define the default max-age value in seconds for
                          private requests. Default value: 0
-
+                         
+    
+    SCC_DISABLED: Disable the addition of headers, such as during development.
+                  Default value: *False*
     """
     def process_response(self, request, response):
+        if DISABLED:
+            return response
+        
         meta = request.META.get('PATH_INFO', "")
         host = request.META.get('HTTP_HOST', "") + meta
 
